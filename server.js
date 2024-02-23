@@ -53,8 +53,13 @@ app.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    // Retrieve admin credentials from environment variables
+    const adminEmail = process.env.ADMIN_EMAIL;
+    const adminPassword = process.env.ADMIN_PASSWORD;
+
     // Validate admin credentials
-    if (email === 'peterkure256@gmail.com' && password === 'R@mpage604T') {
+    const validCredentials = await bcrypt.compare(password, adminPassword);
+    if (email === adminEmail && validCredentials) {
       const token = jwt.sign({ email }, secretKey, { expiresIn: '1h' });
       res.json({ token });
     } else {

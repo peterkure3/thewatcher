@@ -32,6 +32,18 @@
       background-color: #4CAF50;
       color: white;
     }
+    .logout-btn {
+      background-color: #f44336;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 20px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
@@ -54,6 +66,8 @@
 
     </tbody>
   </table>
+
+  <button class="logout-btn" onclick="logout()">Logout</button>
 
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="app.js"></script>
@@ -84,16 +98,12 @@
       }
     }
 
-    // Function to handle login success
-    function handleLoginSuccess() {
-      document.getElementById('loginStatus').style.display = 'block';
-      document.getElementById('loginSuccessMessage').style.display = 'block';
-    }
-
-    // Function to simulate login (replace with actual login logic)
-    function login() {
-      // Simulate login success
-      setTimeout(handleLoginSuccess, 1000);
+    // Function to handle logout
+    function logout() {
+      // Clear authentication token (if any)
+      localStorage.removeItem('token');
+      // Redirect to login page
+      window.location.href = './index.html';
     }
 
     // Fetch users on page load
