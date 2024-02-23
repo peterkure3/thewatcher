@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>The Watcher</title>
@@ -57,28 +57,49 @@
         color: green;
       }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Admin Login</h1>
     <form id="loginForm" onsubmit="event.preventDefault(); login();">
-        <input type="email" name="email" placeholder="Email" required /><br />
-        <input type="password" name="password" placeholder="Password" required /><br />
-        <button type="submit">Login</button>
+      <input type="email" name="email" placeholder="Email" required /><br />
+      <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        required
+      /><br />
+      <button type="submit">Login</button>
     </form>
     <div id="loginStatus">
-        <p id="loginSuccessMessage">Login successful!</p>
+      <p id="loginSuccessMessage">Login successful!</p>
     </div>
 
     <h1>User Registration Form</h1>
-    <form id="registerForm">
-        <input type="email" name="email" placeholder="Email" required /><br />
-        <input type="text" name="username" placeholder="Name" required /><br />
-        <input type="password" name="password" placeholder="Password" required /><br />
-        <select name="role">
-            <option value="user">User</option>
-            <option value="admin">Admin</option>
-        </select><br />
-        <button type="submit">Register</button>
+    <form id="registerForm" onsubmit="event.preventDefault(); register();">
+      <input type="email" name="email" placeholder="Email" required /><br />
+      <input type="text" name="name" placeholder="Name" required /><br />
+      <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        required
+      /><br />
+      <div id="businessField">
+        <!-- Container for the business field -->
+        <input type="text" name="business" placeholder="Business" /><br />
+        <!-- Business field (initially hidden) -->
+      </div>
+      <select
+        name="role"
+        id="roleSelect"
+        onchange="toggleBusinessField()"
+        required
+      >
+        <!-- Dropdown for selecting role -->
+        <option value="user">User</option>
+        <option value="admin">Admin</option></select
+      ><br />
+      <button type="submit">Register</button>
     </form>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -96,10 +117,22 @@
         // Simulate login success
         setTimeout(handleLoginSuccess, 1000);
       }
+
+      // Function to toggle visibility of the business field based on selected role
+      function toggleBusinessField() {
+        const roleSelect = document.getElementById("roleSelect");
+        const businessField = document.getElementById("businessField");
+
+        if (roleSelect.value === "admin") {
+          businessField.style.display = "none"; // Hide business field for admin
+        } else {
+          businessField.style.display = "block"; // Show business field for user
+        }
+      }
     </script>
-</body>
-<!-- Footer -->
-<footer>
-  <p>&copy; 2024 Farmhub-Connect. All rights reserved.</p>
-</footer>
+  </body>
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2024 Farmhub-Connect. All rights reserved.</p>
+  </footer>
 </html>

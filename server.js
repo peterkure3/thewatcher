@@ -21,27 +21,28 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Secret key for JWT
-const secretKey = 'your_secret_key';
+const secretKey = process.env.SECRET_KEY;
 
 // User registration endpoint
 app.post('/register', async (req, res) => {
   try {
-    const { username, email, password, role } = req.body;
+    const { email, name, password, role, business } = req.body;
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Insert user into database
-    const query = 'INSERT INTO users (username, email, password, role, joined_at) VALUES ($1, $2, $3, $4, $5)';
-    const values = [username, email, hashedPassword, role, new Date()];
+    // Insert user into database based on role
+    let query, values;
+    if (role === 'admin') {
+      query = 'INSERT INTO admins (email, name, password) VALUES ($1, $2, $3)';
+      values = [email, name, hashedPassword];
+    } else {
+      query = 'INSERT INTO users (email, name, password, business) VALUES ($1, $2, $3, $4)';
+      values = [email, name, hashedPassword, business];
+    }
     await pool.query(query, values);
 
-    // Fetch total number of users
-    const countQuery = 'SELECT COUNT(*) FROM users';
-    const { rows } = await pool.query(countQuery);
-    const totalCount = rows[0].count;
-
-    res.status(201).json({ message: `${username} added successfully. Total users: ${totalCount}` });
+    res.status(201).json({ message: `${name} added successfully` });
   } catch (error) {
     console.error('Error registering user:', error);
     res.status(500).json({ error: 'Error registering user' });
@@ -53,23 +54,29 @@ app.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Retrieve admin credentials from environment variables
-    const adminEmail = process.env.ADMIN_EMAIL;
-    const adminPassword = process.env.ADMIN_PASSWORD;
+    // Retrieve admin credentials from the database
+    const query = 'SELECT * FROM admins WHERE email = $1';
+    const { rows } = await pool.query(query, [email]);
+    const admin = rows[0];
+
+    if (!admin) {
+      return res.status(401).json({ error: 'Admin not found' });
+    }
 
     // Validate admin credentials
-    const validCredentials = await bcrypt.compare(password, adminPassword);
-    if (email === adminEmail && validCredentials) {
-      const token = jwt.sign({ email }, secretKey, { expiresIn: '1h' });
+    const validCredentials = await bcrypt.compare(password, admin.password);
+    if (validCredentials) {
+      const token = jwt.sign({ email }, secretKey, { expiresIn: process.env.TOKEN_EXPIRATION || '1h' });
       res.json({ token });
     } else {
-      res.status(401).json({ error: 'Invalid credentials' });
+      res.status(401).json({ error: 'Invalid email or password' });
     }
   } catch (error) {
     console.error('Error logging in:', error);
     res.status(500).json({ error: 'Error logging in' });
   }
 });
+
 
 // Middleware to verify admin token
 const verifyToken = (req, res, next) => {
@@ -88,16 +95,22 @@ const verifyToken = (req, res, next) => {
   });
 };
 
-// Admin endpoint to retrieve all users
-app.get('/admin/users', verifyToken, async (req, res) => {
+// Admin endpoint to retrieve all admins
+app.get('/admin/admins', verifyToken, async (req, res) => {
   try {
-    const query = 'SELECT * FROM users';
+    const query = 'SELECT email, name FROM admins';
     const { rows } = await pool.query(query);
     res.json(rows);
   } catch (error) {
-    console.error('Error fetching users:', error);
-    res.status(500).json({ error: 'Error fetching users' });
+    console.error('Error fetching admins:', error);
+    res.status(500).json({ error: 'Error fetching admins' });
   }
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something went wrong!');
 });
 
 // Start the server
