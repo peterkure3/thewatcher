@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      color: black;
+      margin: 36px;
+      padding: 0;
+    }
+    h1 {
+      color: green;
+    }
+    #loginStatus, #loginSuccessMessage {
+      display: none;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>Admin Dashboard</h1>
+  <p id="loginStatus">Logged in as Admin</p>
+  <p id="loginSuccessMessage" style="color: green;">Login successful</p>
+
+  <h2>User List</h2>
+  <table id="userTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Business</th>
+        <th>Joined</th>
+      </tr>
+    </thead>
+    <tbody id="userList">
+
+
+    </tbody>
+  </table>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // Function to fetch and display user list
+    async function fetchUsers() {
+      try {
+        const response = await axios.get('https://farmhub-backend.onrender.com/users/getusers');
+        const userList = response.data;
+
+        // Clear existing list
+        const userListElement = document.getElementById('userList');
+        userListElement.innerHTML = '';
+
+        // Append each user to the table
+        userList.forEach(user => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${user.name}</td>
+            <td>${user.email}</td>
+            <td>${user.business}</td>
+            <td>${user.joined}</td>
+          `;
+          userListElement.appendChild(row);
+        });
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    }
+
+    // Function to handle login success
+    function handleLoginSuccess() {
+      document.getElementById('loginStatus').style.display = 'block';
+      document.getElementById('loginSuccessMessage').style.display = 'block';
+    }
+
+    // Function to simulate login (replace with actual login logic)
+    function login() {
+      // Simulate login success
+      setTimeout(handleLoginSuccess, 1000);
+    }
+
+    // Fetch users on page load
+    fetchUsers();
+  </script>
+</body>
+</html>
