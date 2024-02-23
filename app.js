@@ -30,20 +30,4 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
       console.error('Registration failed:', error);
       alert('Registration failed');
     }
-  });
-  
-  window.addEventListener('DOMContentLoaded', fetchUsers);
-  
-  async function fetchUsers() {
-    const token = localStorage.getItem('adminToken');
-  
-    try {
-      const response = await axios.get('https://farmhub-backend.onrender.com/admin/users', { headers: { Authorization: token } });
-      const userList = document.getElementById('userList');
-      userList.innerHTML = response.data.map(user => `<li>${user.username} - ${user.email} (Joined: ${new Date(user.joined_at)})</li>`).join('');
-    } catch (error) {
-      console.error('Error fetching users:', error);
-      alert('Error fetching users');
-    }
-  }
-  
+  });  
