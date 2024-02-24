@@ -4,7 +4,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     const userData = Object.fromEntries(formData.entries());
   
     try {
-      const response = await axios.post('https://farmhub-backend.onrender.com/login', userData);
+      const response = await axios.post('https://thewatcher-backend.onrender.com/login', userData);
       const token = response.data.token;
       localStorage.setItem('adminToken', token);
       alert('Login successful');
@@ -22,7 +22,7 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     const token = localStorage.getItem('adminToken');
   
     try {
-      const response = await axios.post('https://farmhub-backend.onrender.com/register', userData, { headers: { Authorization: token } });
+      const response = await axios.post('https://thewatcher-backend.onrender.com/register', userData, { headers: { Authorization: token } });
       alert(response.data.message);
       this.reset();
       fetchUsers();

@@ -76,7 +76,7 @@
     // Function to fetch and display user list
     async function fetchUsers() {
       try {
-        const response = await axios.get('https://farmhub-backend.onrender.com/users/getusers');
+        const response = await axios.get('https://farmhub-backend.onrender.com/admin/users');
         const userList = response.data;
 
         // Clear existing list
@@ -102,7 +102,7 @@
     // Function to fetch Admins
     async function fetchAdmins() {
       try {
-        const response = await axios.get('https://farmhub-backend.onrender.com/users/getAdmin');
+        const response = await axios.get('https://thewatcher-backend.onrender.com/admins/admins');
         const adminList = response.data;
 
         // Clear existing list

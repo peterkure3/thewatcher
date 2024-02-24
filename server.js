@@ -50,7 +50,7 @@ app.post('/register', async (req, res) => {
 });
 
 // Admin login endpoint
-app.post('/admins/login', async (req, res) => {
+app.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -106,6 +106,33 @@ app.get('/admin/admins', verifyToken, async (req, res) => {
     res.status(500).json({ error: 'Error fetching admins' });
   }
 });
+
+// Endpoint to get the number of users
+app.get('/users/count', verifyToken, async (req, res) => {
+  try {
+    const query = 'SELECT COUNT(*) FROM users';
+    const { rows } = await pool.query(query);
+    const count = parseInt(rows[0].count);
+    res.json({ count });
+  } catch (error) {
+    console.error('Error fetching user count:', error);
+    res.status(500).json({ error: 'Error fetching user count' });
+  }
+});
+
+
+// Endpoint to fetch user list
+app.get('/admin/users', verifyToken, async (req, res) => {
+  try {
+    const query = 'SELECT * FROM users';
+    const { rows } = await pool.query(query);
+    res.json(rows);
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ error: 'Error fetching users' });
+  }
+});
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {
