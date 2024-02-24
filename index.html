@@ -104,31 +104,18 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="app.js"></script>
     <script>
-      // Function to handle login success
-      function handleLoginSuccess() {
-        document.getElementById("loginStatus").style.display = "block";
-        document.getElementById("loginSuccessMessage").style.display = "block";
-        window.location.href = "./dashboard.html"; // Redirect to the dashboard page
-      }
-
-      // Function to simulate login (replace with actual login logic)
-      function login() {
-        // Simulate login success
-        setTimeout(handleLoginSuccess, 1000);
-      }
-
       // Function to handle admin registration
       async function adminRegister() {
         const form = document.getElementById("adminRegisterForm");
         const formData = new FormData(form);
 
         try {
-          const response = await axios.post("/admin/register", formData);
-          alert(response.data.message);
-          // Redirect or perform any other action upon successful registration
+          const response = await axios.post("https://thewatcher-backend.onrender.com/admin/register", formData);
+          alert(response.data.message); // Alert for successful registration
+          form.reset(); // Reset form after successful registration
         } catch (error) {
           console.error("Error registering admin:", error);
-          // Handle error response
+          alert("Admin registration failed"); // Alert for failed registration
         }
       }
 
@@ -138,12 +125,12 @@
         const formData = new FormData(form);
 
         try {
-          const response = await axios.post("/register", formData);
-          alert(response.data.message);
-          // Redirect or perform any other action upon successful registration
+          const response = await axios.post("https://thewatcher-backend.onrender.com/register", formData);
+          alert(response.data.message); // Alert for successful registration
+          form.reset(); // Reset form after successful registration
         } catch (error) {
           console.error("Error registering user:", error);
-          // Handle error response
+          alert("User registration failed"); // Alert for failed registration
         }
       }
     </script>

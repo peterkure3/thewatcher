@@ -11,9 +11,6 @@ const port = process.env.PORT || 3000;
 // Initialize PostgreSQL pool
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
 });
 
 // Middleware
