@@ -26,7 +26,7 @@ const secretKey = process.env.SECRET_KEY;
 // User registration endpoint
 app.post('/register', async (req, res) => {
   try {
-    const { email, name, password, role, business } = req.body;
+    const { email, name, password, business } = req.body;
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -50,7 +50,7 @@ app.post('/register', async (req, res) => {
 });
 
 // Admin login endpoint
-app.post('/login', async (req, res) => {
+app.post('/admins/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
