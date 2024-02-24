@@ -67,6 +67,20 @@
     </tbody>
   </table>
 
+  <h2>AdminList</h2>
+  <table id="adminTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody id="adminList">
+
+
+    </tbody>
+  </table>
+
   <div id="userCountSection">Total Users: <span id="userCount"></span></div> <!-- Section for displaying user count -->
   <button class="logout-btn" onclick="logout()">Logout</button>
 
@@ -76,7 +90,7 @@
     // Function to fetch and display user list
     async function fetchUsers() {
       try {
-        const response = await axios.get('https://farmhub-backend.onrender.com/admin/users');
+        const response = await axios.get('https://thewatcher-backend.onrender.com/admin/users');
         const userList = response.data;
 
         // Clear existing list
@@ -102,7 +116,7 @@
     // Function to fetch Admins
     async function fetchAdmins() {
       try {
-        const response = await axios.get('https://thewatcher-backend.onrender.com/admins/admins');
+        const response = await axios.get('https://thewatcher-backend.onrender.com/admin/admins');
         const adminList = response.data;
 
         // Clear existing list
@@ -123,6 +137,18 @@
       }
     }
 
+    // Function to fetch user count
+    async function fetchUserCount() {
+      try {
+        const response = await axios.get('https://thewatcher-backend.onrender.com/users/count');
+        const userCount = response.data.count;
+        const userCountElement = document.getElementById('userCount');
+        userCountElement.textContent = userCount;
+      } catch (error) {
+        console.error('Error fetching user count:', error);
+      }
+    }
+
     // Function to handle logout
     function logout() {
       // Clear authentication token (if any)
@@ -131,8 +157,10 @@
       window.location.href = './index.html';
     }
 
-    // Fetch users on page load
+    // Fetch users, admins, and user count on page load
     fetchUsers();
+    fetchAdmins();
+    fetchUserCount();
   </script>
 </body>
 <footer>
