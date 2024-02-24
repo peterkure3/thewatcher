@@ -24,7 +24,7 @@ app.use(cors());
 const secretKey = process.env.SECRET_KEY;
 
 // User registration endpoint
-app.post('//register', async (req, res) => {
+app.post('/register', async (req, res) => {
   try {
     const { email, name, password, business } = req.body;
 
