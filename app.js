@@ -1,5 +1,5 @@
 // Event listener for admin login form
-document.getElementById('adminLoginForm').addEventListener('submit', async function(event) {
+document.getElementById('LoginForm').addEventListener('submit', async function(event) {
   event.preventDefault();
   const formData = new FormData(this);
   const adminData = Object.fromEntries(formData.entries());
