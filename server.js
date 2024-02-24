@@ -24,28 +24,45 @@ app.use(cors());
 const secretKey = process.env.SECRET_KEY;
 
 // User registration endpoint
-app.post('/register', async (req, res) => {
+app.post('//register', async (req, res) => {
   try {
     const { email, name, password, business } = req.body;
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Insert user into database based on role
-    let query, values;
-    if (role === 'admin') {
-      query = 'INSERT INTO admins (email, name, password) VALUES ($1, $2, $3)';
-      values = [email, name, hashedPassword];
-    } else {
-      query = 'INSERT INTO users (email, name, password, business) VALUES ($1, $2, $3, $4)';
-      values = [email, name, hashedPassword, business];
-    }
+    // Insert user into 'users' table
+    const query = 'INSERT INTO users (email, name, password, business) VALUES ($1, $2, $3, $4)';
+    const values = [email, name, hashedPassword, business];
+    
     await pool.query(query, values);
 
-    res.status(201).json({ message: `${name} added successfully` });
+    res.status(201).json({ message: `${name} added as user successfully` });
   } catch (error) {
     console.error('Error registering user:', error);
     res.status(500).json({ error: 'Error registering user' });
+  }
+});
+
+
+// Admin registration
+app.post('/admin/register', async (req, res) => {
+  try {
+    const { email, name, password } = req.body;
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Insert admin into 'admins' table
+    const query = 'INSERT INTO admins (email, name, password) VALUES ($1, $2, $3)';
+    const values = [email, name, hashedPassword];
+    
+    await pool.query(query, values);
+
+    res.status(201).json({ message: `${name} added as admin successfully` });
+  } catch (error) {
+    console.error('Error registering admin:', error);
+    res.status(500).json({ error: 'Error registering admin' });
   }
 });
 
