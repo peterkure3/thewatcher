@@ -96,7 +96,7 @@ const verifyToken = (req, res, next) => {
 };
 
 // Admin endpoint to retrieve all admins
-app.get('/admin/admins', verifyToken, async (req, res) => {
+app.get('/admin/admins', async (req, res) => {
   try {
     const query = 'SELECT email, name FROM admins';
     const { rows } = await pool.query(query);
@@ -108,7 +108,7 @@ app.get('/admin/admins', verifyToken, async (req, res) => {
 });
 
 // Endpoint to get the number of users
-app.get('/users/count', verifyToken, async (req, res) => {
+app.get('/users/count', async (req, res) => {
   try {
     const query = 'SELECT COUNT(*) FROM users';
     const { rows } = await pool.query(query);
@@ -122,7 +122,7 @@ app.get('/users/count', verifyToken, async (req, res) => {
 
 
 // Endpoint to fetch user list
-app.get('/admin/users', verifyToken, async (req, res) => {
+app.get('/admin/users', async (req, res) => {
   try {
     const query = 'SELECT * FROM users';
     const { rows } = await pool.query(query);
